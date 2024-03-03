@@ -13,7 +13,7 @@
 	</PropertyGroup>
 
   <ItemGroup>
-		<Content Include="videos_temp.json">
+		<Content Include="results/*">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>

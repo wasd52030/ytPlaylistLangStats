@@ -8,7 +8,8 @@ using System.Data.SQLite;
 using Dapper;
 using MoreLinq;
 
-async Task getPlayListData(string url, List<JsonElement> videoList, string apiKey, string pageToken = "", int i = 0)
+// return full api result
+async Task<string> getPlayListItemData(string url, List<JsonElement> videoList, string apiKey, string pageToken = "", int i = 0)
 {
     Uri playListUrl = new(url);
     var playListUrlArguments = playListUrl.Query
@@ -40,30 +41,60 @@ async Task getPlayListData(string url, List<JsonElement> videoList, string apiKe
     if (root.TryGetProperty("nextPageToken", out JsonElement token))
     {
         i++;
-        Console.WriteLine(i);
-        await getPlayListData(url, videoList, apiKey, token.GetString()!, i);
+        Console.WriteLine($"page {i}");
+        return await getPlayListItemData(url, videoList, apiKey, token.GetString()!, i);
     }
     else
     {
         JsonSerializerOptions options = new()
         {
-            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.All),
             WriteIndented = true
         };
-        await File.WriteAllTextAsync("./data.json", JsonSerializer.Serialize(new { items = videoList }, options));
+        // await File.WriteAllTextAsync("./data.json", JsonSerializer.Serialize(new { items = videoList }, options));
+        Console.WriteLine("collect PlayListItemData complete");
+        return JsonSerializer.Serialize(new { items = videoList }, options);
     }
 }
 
-// TODO: 檢查是否有已存在的result.json，有的話以原有檔案為基準增加
-async Task getVideoDetail(string path, string apiKey)
+async Task<JsonDocument> getPlayListData(string url, string apiKey)
 {
-    string playList = await File.ReadAllTextAsync(path);
+    Uri playListUrl = new(url);
+    var playListUrlArguments = playListUrl.Query
+                                       .Substring(1) // Remove '?'
+                                       .Split('&')
+                                       .Select(q => q.Split('='))
+                                       .ToDictionary(
+                                           q => q.FirstOrDefault()!,       // assert that the length is greater than 2
+                                           q => q.Skip(1).FirstOrDefault()!
+                                       );
+
+    UriBuilder apiUrl = new($"https://youtube.googleapis.com/youtube/v3/playlists?part=snippet&maxResults=50&id={playListUrlArguments!["list"]}&key={apiKey}");
+
+    HttpClient client = new();
+    var res = await client.GetStringAsync(apiUrl.Uri);
+    var json = JsonDocument.Parse(res, new JsonDocumentOptions { AllowTrailingCommas = true });
+
+    Console.WriteLine("collect PlayListData complete");
+    return json;
+}
+
+async Task getVideoDetail(string playListURL, string apiKey, string pageToken = "", int i = 0)
+{
     List<Video> details = new();
 
-    using JsonDocument playListData = JsonDocument.Parse(playList, new JsonDocumentOptions { AllowTrailingCommas = true });
+    using JsonDocument playListData = await getPlayListData(playListURL, apiKey);
+    JsonElement playListDataRoot = playListData.RootElement;
+    var playListDataItems = playListDataRoot.GetProperty("items")[0];
 
-    JsonElement root = playListData.RootElement;
-    JsonElement items = root.GetProperty("items");
+    var ch = playListDataItems.GetProperty("snippet").GetProperty("channelTitle").GetString()!;
+    var playListtitle = playListDataItems.GetProperty("snippet").GetProperty("localized").GetProperty("title").GetString()!;
+
+    string playList = await getPlayListItemData(playListURL, new List<JsonElement>(), apiKey, pageToken = "", i = 0);
+    using JsonDocument playListItemData = JsonDocument.Parse(playList, new JsonDocumentOptions { AllowTrailingCommas = true });
+
+    JsonElement playListItemDataroot = playListItemData.RootElement;
+    JsonElement playListItemDataitems = playListItemDataroot.GetProperty("items");
 
     JsonSerializerOptions options = new()
     {
@@ -71,11 +102,16 @@ async Task getVideoDetail(string path, string apiKey)
         WriteIndented = true
     };
 
-    string dbPath = @"./videos.sqlite";
-    using var db = new SQLiteConnection("data source=" + dbPath);
-    var videos = db.Query<Video>("select * from videos");
+    IEnumerable<Video>? videDB = null;
+    if (File.Exists($"./resources/{ch}-{playListtitle}_videosLangCheck.json"))
+    {
+        string dbPath = @$"./resources/{ch}-{playListtitle}_videos.sqlite";
+        using var db = new SQLiteConnection("data source=" + dbPath);
+        videDB = db.Query<Video>("select * from videos");
+    }
 
-    foreach (var video in items.EnumerateArray())
+
+    foreach (var video in playListItemDataitems.EnumerateArray())
     {
         string? title = video.GetProperty("snippet").GetProperty("title").GetString();
         string? id = video.GetProperty("snippet").GetProperty("resourceId").GetProperty("videoId").GetString();
@@ -94,38 +130,54 @@ async Task getVideoDetail(string path, string apiKey)
                 continue;
             }
 
-            var exists = videos.FirstOrDefault(v => v.id == id);
-            if (exists != null)
+            if (videDB != null)
             {
-                Console.WriteLine(6);
-                details.Add(exists);
+                var exists = videDB.FirstOrDefault(v => v.id == id);
+                if (exists != null)
+                {
+                    details.Add(exists);
+                }
+                else
+                {
+                    var detail = new Video(
+                        id!,
+                        title!,
+                        data[0].GetProperty("snippet").TryGetProperty("defaultAudioLanguage", out JsonElement lang)
+                                ? lang.GetString()!
+                                : "ukunown"
+                    );
+                    details.Add(detail);
+                }
             }
             else
             {
                 var detail = new Video(
-                    id!,
-                    title!,
-                    data[0].GetProperty("snippet").TryGetProperty("defaultAudioLanguage", out JsonElement lang)
-                            ? lang.GetString()!
-                            : "ukunown"
-                );
+                        id!,
+                        title!,
+                        data[0].GetProperty("snippet").TryGetProperty("defaultAudioLanguage", out JsonElement lang)
+                                ? lang.GetString()!
+                                : "ukunown"
+                    );
                 details.Add(detail);
             }
         }
 
-        Console.WriteLine($"影片 {title};id: {id} ok！");
+
+        Console.WriteLine($"影片 {title}\nid: {id}\nok！\n");
     }
 
-    await File.WriteAllTextAsync("./videos_temp.json", JsonSerializer.Serialize(new { items = details }, options));
+    await File.WriteAllTextAsync($"./resources/{ch}-{playListtitle}_videosLangCheck.json", JsonSerializer.Serialize(new { items = details }, options));
+
+    Console.Write("因Youtube API能拿到的資料不完整，");
+    Console.WriteLine($"請到檔案「{ch}-{playListtitle}_videosLangCheck.json」再次確認每隻影片的語言，再行利用stat指令做統計");
 }
 
-async Task maintainDatabase(string path)
+async Task maintainDatabase(string path, string dbPath, string playListURL, string apiKey)
 {
     string file = await File.ReadAllTextAsync(path);
 
     var json = JsonSerializer.Deserialize<Videos>(file);
 
-    string dbPath = @"./videos.sqlite";
     using var db = new SQLiteConnection("data source=" + dbPath);
     if (!File.Exists(dbPath))
     {
@@ -142,9 +194,15 @@ async Task maintainDatabase(string path)
                 var insertScript = "INSERT INTO videos VALUES (@id, @title, @lang)";
                 var s = db.Execute(insertScript, video);
             }
+            else
+            {
+                var insertScript = "UPDATE videos SET lang=@title, lang=@lang where id=@id";
+                var s = db.Execute(insertScript, video);
+            }
         }
     }
 
+    // 確保資料庫的東西跟播放清單一致
     var videos = db.Query<Video>("select * from videos");
     var diff = videos.ExceptBy(json.items, video => video.id);
     if (diff.Any())
@@ -158,23 +216,36 @@ async Task maintainDatabase(string path)
     }
 }
 
-async Task dataAnalysis(string path)
+async Task dataAnalysis(string playListURL, string apiKey)
 {
-    await maintainDatabase(path);
+    using JsonDocument playListData = await getPlayListData(playListURL, apiKey);
+    JsonElement playListDataRoot = playListData.RootElement;
+    var playListDataitems = playListDataRoot.GetProperty("items")[0];
 
-    string dbPath = @"./videos.sqlite";
+    var ch = playListDataitems.GetProperty("snippet").GetProperty("channelTitle").GetString()!;
+    var playListtitle = playListDataitems.GetProperty("snippet").GetProperty("localized").GetProperty("title").GetString()!;
+
+    var jsonPath = $"./resources/{ch}-{playListtitle}_videosLangCheck.json";
+    string file = await File.ReadAllTextAsync(jsonPath);
+
+    var json = JsonSerializer.Deserialize<Videos>(file);
+
+    string dbPath = @$"./resources/{ch}-{playListtitle}_videos.sqlite";
+
+    await maintainDatabase(jsonPath, dbPath, playListURL, apiKey);
+
     using var db = new SQLiteConnection("data source=" + dbPath);
     var videos = db.Query<Video>("select * from videos");
 
-    var stat = videos.GroupBy(v => v.lang).ToDictionary(o => o.Key, o => (double)o.Count());
-
-    stat = stat.OrderByDescending(l => l.Value).ToDictionary(l => l.Key, l => l.Value);
+    var stat = videos.GroupBy(v => v.lang)
+                     .OrderByDescending(item => item.Count())
+                     .ThenBy(item => item.Key)
+                     .ToDictionary(o => o.Key, o => (double)o.Count());
     stat.Add("total", stat.Values.Sum());
-
     var percent = stat.ToDictionary(record => record.Key, record => record.Value / stat["total"]);
 
     await File.WriteAllTextAsync(
-        Path.Combine(Directory.GetCurrentDirectory(), "result.json"),
+        Path.Combine(Directory.GetCurrentDirectory(), $"./resources/{ch}-{playListtitle}_result.json"),
         JsonSerializer.Serialize(
             new Dictionary<string, Dictionary<string, double>>() { { "統計", stat }, { "占比", percent } },
             new JsonSerializerOptions { WriteIndented = true, Encoder = JavaScriptEncoder.Create(UnicodeRanges.All) }
@@ -185,6 +256,7 @@ async Task dataAnalysis(string path)
 
 async Task main()
 {
+    Console.OutputEncoding = System.Text.Encoding.UTF8;
 
     IConfiguration configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -201,27 +273,31 @@ async Task main()
     var rootCommand = new RootCommand("youtube播放清單語言統計");
 
     // download command
-    var downloadCommand = new Command(name: "download", description: "初步下載統整播放清單中的語言,存入viedos.json");
+    var downloadCommand = new Command(name: "download", description: "初步下載統整播放清單中的語言");
+
+    var playlistOption = new Option<string>
+    (name: "--playlist",
+    description: "youtube playlist url",
+    getDefaultValue: () => "https://www.youtube.com/playlist?list=PLdx_s59BrvfXJXyoU5BHpUkZGmZL0g3Ip");
+
+    downloadCommand.AddOption(playlistOption);
     rootCommand.AddCommand(downloadCommand);
-    downloadCommand.SetHandler(async () =>
+
+    downloadCommand.SetHandler(async (playlistOption) =>
     {
-        await getPlayListData(
-            "https://www.youtube.com/playlist?list=PLdx_s59BrvfXJXyoU5BHpUkZGmZL0g3Ip",
-            new List<JsonElement>(),
-            config.apiKey
-        );
-        await getVideoDetail("./data.json", config.apiKey!);
-        Console.Write("因Youtube API能拿到的資料不完整，");
-        Console.WriteLine("請再次確認每隻影片的語言，再行利用stat指令做統計");
-    });
+        await getVideoDetail(playlistOption, config.apiKey);
+    }, playlistOption);
 
     // stat command
-    var statCommand = new Command(name: "stat", description: "計算viedos.json中的語言種類與各有幾支影片，輸出到result.json");
-    rootCommand.AddCommand(statCommand);
-    statCommand.SetHandler(async () =>
+    var statCommand = new Command(name: "stat", description: "進行統計，並輸出json檔與sqlite檔")
     {
-        await dataAnalysis("./videos_temp.json");
-    });
+        playlistOption
+    };
+    rootCommand.AddCommand(statCommand);
+    statCommand.SetHandler(async (playlistOption) =>
+    {
+        await dataAnalysis(playlistOption, config.apiKey);
+    }, playlistOption);
 
     await rootCommand.InvokeAsync(args);
 }
