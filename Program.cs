@@ -276,7 +276,7 @@ async Task main()
     var downloadCommand = new Command(name: "download", description: "初步下載統整播放清單中的語言");
 
     var playlistOption = new Option<string>
-    (aliases:new string[]{"--playlist","--pl"},
+    (aliases: new string[] { "--playlist", "--pl" },
     description: "youtube playlist url",
     getDefaultValue: () => "https://www.youtube.com/playlist?list=PLdx_s59BrvfXJXyoU5BHpUkZGmZL0g3Ip");
 
