@@ -144,7 +144,7 @@ async Task getVideoDetail(string playListURL, string apiKey, string pageToken = 
                         title!,
                         data[0].GetProperty("snippet").TryGetProperty("defaultAudioLanguage", out JsonElement lang)
                                 ? lang.GetString()!
-                                : "ukunown"
+                                : "unknown"
                     );
                     details.Add(detail);
                 }
@@ -251,7 +251,7 @@ async Task dataAnalysis(string playListURL, string apiKey)
             new JsonSerializerOptions { WriteIndented = true, Encoder = JavaScriptEncoder.Create(UnicodeRanges.All) }
         )
     );
-    Console.WriteLine("stat success！");
+    Console.WriteLine($"playlist {ch}-{playListtitle} stat success！");
 }
 
 async Task main()
