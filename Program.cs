@@ -172,12 +172,9 @@ async Task getVideoDetail(string playListURL, string apiKey, string pageToken = 
     Console.WriteLine($"請到檔案「{ch}-{playListtitle}_videosLangCheck.json」再次確認每隻影片的語言，再行利用stat指令做統計");
 }
 
-async Task maintainDatabase(string path, string dbPath, string playListURL, string apiKey)
+
+async Task maintainDatabase(Videos? json, string dbPath)
 {
-    string file = await File.ReadAllTextAsync(path);
-
-    var json = JsonSerializer.Deserialize<Videos>(file);
-
     using var db = new SQLiteConnection("data source=" + dbPath);
     if (!File.Exists(dbPath))
     {
@@ -231,8 +228,7 @@ async Task dataAnalysis(string playListURL, string apiKey)
     var json = JsonSerializer.Deserialize<Videos>(file);
 
     string dbPath = @$"./resources/{ch}-{playListtitle}_videos.sqlite";
-
-    await maintainDatabase(jsonPath, dbPath, playListURL, apiKey);
+    await maintainDatabase(json, dbPath);
 
     using var db = new SQLiteConnection("data source=" + dbPath);
     var videos = db.Query<Video>("select * from videos");
