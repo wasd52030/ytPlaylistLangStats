@@ -23,6 +23,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="MoreLinq" Version="4.1.0" />
+    <PackageReference Include="Plotly.NET.CSharp" Version="0.11.1" />
+    <PackageReference Include="Plotly.NET.ImageExport" Version="5.0.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
   </ItemGroup>
