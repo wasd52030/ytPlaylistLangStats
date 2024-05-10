@@ -79,7 +79,7 @@ class CollectData
         return json;
     }
 
-    public static async Task GetVideoDetail(string playListURL, string apiKey, string pageToken = "", int i = 0)
+    public static async Task Invoke(string playListURL, string apiKey, string pageToken = "", int i = 0)
     {
         List<Video> details = new();
 
@@ -96,12 +96,12 @@ class CollectData
         JsonElement playListItemDataroot = playListItemData.RootElement;
         JsonElement playListItemDataitems = playListItemDataroot.GetProperty("items");
 
-        IEnumerable<Video>? videDB = null;
+        IEnumerable<Video>? videoDB = null;
         if (File.Exists($"./resources/{ch}-{playListtitle}_videosLangCheck.json"))
         {
             string dbPath = @$"./resources/{ch}-{playListtitle}_videos.sqlite";
             using var db = new SQLiteConnection("data source=" + dbPath);
-            videDB = db.Query<Video>("select * from videos");
+            videoDB = db.Query<Video>("select * from videos");
         }
 
 
@@ -124,9 +124,9 @@ class CollectData
                     continue;
                 }
 
-                if (videDB != null)
+                if (videoDB != null)
                 {
-                    var exists = videDB.FirstOrDefault(v => v.id == id);
+                    var exists = videoDB.FirstOrDefault(v => v.id == id);
                     if (exists != null)
                     {
                         details.Add(exists);
