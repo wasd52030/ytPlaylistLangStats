@@ -1,6 +1,16 @@
 {
   "items": [
     {
+      "id": "c_D37tFw7Z8",
+      "title": "Forward",
+      "lang": "日"
+    },
+    {
+      "id": "FWN5GCr8iqc",
+      "title": "恒星",
+      "lang": "日"
+    },
+    {
       "id": "TP1iYThHWHg",
       "title": "めぐる",
       "lang": "日"
@@ -42,7 +52,7 @@
     },
     {
       "id": "BA8i4IMWGUs",
-      "title": "[このすば] ちいさな冒険者 (Ver.アクア\u002Bめぐみん\u002Bダクネス MIX)",
+      "title": "[このすば] ちいさな冒険者 (Ver.アクア+めぐみん+ダクネス MIX)",
       "lang": "日"
     },
     {
@@ -67,7 +77,7 @@
     },
     {
       "id": "GIlMPJNk-pU",
-      "title": "And I\u0027m Home -Original Master Version",
+      "title": "And I'm Home -Original Master Version",
       "lang": "日"
     },
     {
@@ -87,7 +97,7 @@
     },
     {
       "id": "XFqKHgd0eB0",
-      "title": "Mai-HiME: It\u0027s Only the Fairy-Tale (lyrics)",
+      "title": "Mai-HiME: It's Only the Fairy-Tale (lyrics)",
       "lang": "英"
     },
     {
@@ -162,7 +172,7 @@
     },
     {
       "id": "p3BHyOhVXmE",
-      "title": "[Eng CC] Song of the Onion / Chanson de l\u0027Oignon (French Military Song)",
+      "title": "[Eng CC] Song of the Onion / Chanson de l'Oignon (French Military Song)",
       "lang": "法"
     },
     {
@@ -177,7 +187,7 @@
     },
     {
       "id": "CT-P8-D8CC0",
-      "title": "[avex官方]伍佰 \u0026 China Blue 突然的自我(MV完整版)",
+      "title": "[avex官方]伍佰 & China Blue 突然的自我(MV完整版)",
       "lang": "中"
     },
     {
@@ -192,7 +202,7 @@
     },
     {
       "id": "gPpZJlE0Ca8",
-      "title": "伍佰 Wu Bai\u0026China Blue【挪威的森林 Norwegian forest】Official Music Video",
+      "title": "伍佰 Wu Bai&China Blue【挪威的森林 Norwegian forest】Official Music Video",
       "lang": "中"
     },
     {
@@ -202,7 +212,7 @@
     },
     {
       "id": "jH1RNk8954Q",
-      "title": "Ava Max - Kings \u0026 Queens [Official Music Video]",
+      "title": "Ava Max - Kings & Queens [Official Music Video]",
       "lang": "英"
     },
     {
@@ -337,7 +347,7 @@
     },
     {
       "id": "HNC5eu16hEw",
-      "title": "Sing with Karl - Säkkijärven polkka [Speed German Perkele Version][\u002B English Translation]",
+      "title": "Sing with Karl - Säkkijärven polkka [Speed German Perkele Version][+ English Translation]",
       "lang": "德"
     },
     {
@@ -347,7 +357,7 @@
     },
     {
       "id": "rcVb6l4TpHw",
-      "title": "German Soldier\u0027s Song - \u0022Erika\u0022 (with English Subtitles)",
+      "title": "German Soldier's Song - \"Erika\" (with English Subtitles)",
       "lang": "德"
     },
     {
@@ -362,7 +372,7 @@
     },
     {
       "id": "6gar6MONCKs",
-      "title": "\u0022Θά \u0027ρθεις σαν αστραπή\u0022 - Greek Song About The Fall of Constantinople",
+      "title": "\"Θά 'ρθεις σαν αστραπή\" - Greek Song About The Fall of Constantinople",
       "lang": "希臘"
     },
     {
@@ -372,12 +382,12 @@
     },
     {
       "id": "ZzZ1qmXZBuY",
-      "title": "\u0022Hej, sokoły!\u0022 - Polish Folk Song",
+      "title": "\"Hej, sokoły!\" - Polish Folk Song",
       "lang": "波蘭"
     },
     {
       "id": "sE2L9D5Vs7c",
-      "title": "NEFFEX - Till I\u0027m On Top (Lyrics)",
+      "title": "NEFFEX - Till I'm On Top (Lyrics)",
       "lang": "英"
     },
     {
@@ -497,7 +507,7 @@
     },
     {
       "id": "KLr_M5CcEJ0",
-      "title": "今日も空が綺麗だから\u3000/  feat. IA \u0026 結月ゆかり",
+      "title": "今日も空が綺麗だから\u3000/  feat. IA & 結月ゆかり",
       "lang": "日"
     },
     {
@@ -597,7 +607,7 @@
     },
     {
       "id": "MOe5AOuBWv4",
-      "title": "さよならだけが人生か\u3000/  feat. IA \u0026 結月ゆかり",
+      "title": "さよならだけが人生か\u3000/  feat. IA & 結月ゆかり",
       "lang": "日"
     },
     {
@@ -737,7 +747,7 @@
     },
     {
       "id": "EQI8oKA6X4o",
-      "title": "伍佰 Wu Bai\u0026China Blue【斷腸詩 Broken heart poetry】Official Music Video",
+      "title": "伍佰 Wu Bai&China Blue【斷腸詩 Broken heart poetry】Official Music Video",
       "lang": "台"
     },
     {
@@ -747,7 +757,7 @@
     },
     {
       "id": "yz_kza6idVA",
-      "title": "Nico Yazawa vs \u0022\u0022\u0022\u0022Natsuki\u0022\u0022\u0022\u0022 \u0022\u00222\u0022\u0022 - Rap Battle",
+      "title": "Nico Yazawa vs \"\"\"\"Natsuki\"\"\"\" \"\"2\"\" - Rap Battle",
       "lang": "英"
     },
     {
@@ -757,7 +767,7 @@
     },
     {
       "id": "AY7ug521lHo",
-      "title": "Yorushika - 昼鳶 Hirutonbi | Lyrics \u002B Translation!",
+      "title": "Yorushika - 昼鳶 Hirutonbi | Lyrics + Translation!",
       "lang": "日"
     },
     {
@@ -782,7 +792,7 @@
     },
     {
       "id": "CJGSo0aZaak",
-      "title": "誰かのヒーローになりたかった\u3000/ feat. IA \u0026 結月ゆかり",
+      "title": "誰かのヒーローになりたかった\u3000/ feat. IA & 結月ゆかり",
       "lang": "日"
     },
     {
@@ -857,7 +867,7 @@
     },
     {
       "id": "zF1tLgSSvQs",
-      "title": "Rizky Ayuba   You Know I\u0027ll Go Get",
+      "title": "Rizky Ayuba   You Know I'll Go Get",
       "lang": "純音樂"
     },
     {
@@ -882,7 +892,7 @@
     },
     {
       "id": "lNuXbIfwXP4",
-      "title": "伍佰 Wu Bai\u0026China Blue【白鴿 White dove】Official Music Video",
+      "title": "伍佰 Wu Bai&China Blue【白鴿 White dove】Official Music Video",
       "lang": "中"
     },
     {
