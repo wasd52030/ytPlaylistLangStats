@@ -32,12 +32,12 @@ jobs:
       run: dotnet test --no-build --verbosity normal
     - name: Update statistics for https://www.youtube.com/playlist?list=PLdx_s59BrvfXJXyoU5BHpUkZGmZL0g3Ip
       run: |
-        dotnet /home/runner/work/ytPlaylistLangStats/ytPlaylistLangStats/bin/Release/net6.0/ytPlaylistLangStats.dll download
-        dotnet /home/runner/work/ytPlaylistLangStats/ytPlaylistLangStats/bin/Release/net6.0/ytPlaylistLangStats.dll stat
+        dotnet /home/runner/work/ytPlaylistLangStats/ytPlaylistLangStats/bin/Release/net6.0/ytPlaylistLangStats.dll download --ytkey ${{ secrets.YOUTUBEAPIKEY }}
+        dotnet /home/runner/work/ytPlaylistLangStats/ytPlaylistLangStats/bin/Release/net6.0/ytPlaylistLangStats.dll stat --ytkey ${{ secrets.YOUTUBEAPIKEY }}
     - name: Update statistics for https://www.youtube.com/playlist?list=PLdx_s59BrvfVJdXVitsPHvXavY7Z-NhQx
       run: |
-        dotnet /home/runner/work/ytPlaylistLangStats/ytPlaylistLangStats/bin/Release/net6.0/ytPlaylistLangStats.dll download --pl https://www.youtube.com/playlist?list=PLdx_s59BrvfVJdXVitsPHvXavY7Z-NhQx
-        dotnet /home/runner/work/ytPlaylistLangStats/ytPlaylistLangStats/bin/Release/net6.0/ytPlaylistLangStats.dll stat --pl https://www.youtube.com/playlist?list=PLdx_s59BrvfVJdXVitsPHvXavY7Z-NhQx
+        dotnet /home/runner/work/ytPlaylistLangStats/ytPlaylistLangStats/bin/Release/net6.0/ytPlaylistLangStats.dll download --ytkey ${{ secrets.YOUTUBEAPIKEY }} --pl https://www.youtube.com/playlist?list=PLdx_s59BrvfVJdXVitsPHvXavY7Z-NhQx
+        dotnet /home/runner/work/ytPlaylistLangStats/ytPlaylistLangStats/bin/Release/net6.0/ytPlaylistLangStats.dll stat --ytkey ${{ secrets.YOUTUBEAPIKEY }} --pl https://www.youtube.com/playlist?list=PLdx_s59BrvfVJdXVitsPHvXavY7Z-NhQx
     - name: Commit files
       id: commit
       run: |
