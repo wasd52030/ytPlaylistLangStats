@@ -1,6 +1,5 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Unicode;
 using System.Data.SQLite;
 using Dapper;
 using MoreLinq;
@@ -12,13 +11,13 @@ class CollectData
     {
         Uri playListUrl = new(url);
         var playListUrlArguments = playListUrl.Query
-                                           .Substring(1) // Remove '?'
-                                           .Split('&')
-                                           .Select(q => q.Split('='))
-                                           .ToDictionary(
-                                               q => q.FirstOrDefault()!,       // assert that the length is greater than 2
-                                               q => q.Skip(1).FirstOrDefault()!
-                                           );
+                                              .Substring(1) // Remove '?'
+                                              .Split('&')
+                                              .Select(q => q.Split('='))
+                                              .ToDictionary(
+                                                q => q.FirstOrDefault()!,       // assert that the length is greater than 2
+                                                q => q.Skip(1).FirstOrDefault()!
+                                              );
 
         UriBuilder apiUrl = new($"https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId={playListUrlArguments!["list"]}&key={apiKey}");
         if (pageToken != "")
@@ -61,13 +60,13 @@ class CollectData
     {
         Uri playListUrl = new(url);
         var playListUrlArguments = playListUrl.Query
-                                           .Substring(1) // Remove '?'
-                                           .Split('&')
-                                           .Select(q => q.Split('='))
-                                           .ToDictionary(
-                                               q => q.FirstOrDefault()!,       // assert that the length is greater than 2
-                                               q => q.Skip(1).FirstOrDefault()!
-                                           );
+                                              .Substring(1) // Remove '?'
+                                              .Split('&')
+                                              .Select(q => q.Split('='))
+                                              .ToDictionary(
+                                                q => q.FirstOrDefault()!,       // assert that the length is greater than 2
+                                                q => q.Skip(1).FirstOrDefault()!
+                                              );
 
         UriBuilder apiUrl = new($"https://youtube.googleapis.com/youtube/v3/playlists?part=snippet&maxResults=50&id={playListUrlArguments!["list"]}&key={apiKey}");
 
@@ -79,7 +78,7 @@ class CollectData
         return json;
     }
 
-    public static async Task Invoke(string playListURL, string apiKey, string pageToken = "", int i = 0)
+    public static async Task Invoke(string playListURL, string apiKey, string pageToken = "")
     {
         List<Video> details = new();
 
@@ -87,10 +86,15 @@ class CollectData
         JsonElement playListDataRoot = playListData.RootElement;
         var playListDataItems = playListDataRoot.GetProperty("items")[0];
 
-        var ch = playListDataItems.GetProperty("snippet").GetProperty("channelTitle").GetString()!;
-        var playListtitle = playListDataItems.GetProperty("snippet").GetProperty("localized").GetProperty("title").GetString()!;
+        var ch = playListDataItems.GetProperty("snippet")
+                                  .GetProperty("channelTitle")
+                                  .GetString()!;
+        var playListtitle = playListDataItems.GetProperty("snippet")
+                                             .GetProperty("localized")
+                                             .GetProperty("title")
+                                             .GetString()!;
 
-        string playList = await GetPlayListItemData(playListURL, new List<JsonElement>(), apiKey, pageToken = "", i = 0);
+        string playList = await GetPlayListItemData(playListURL, new List<JsonElement>(), apiKey, pageToken = "", 0);
         using JsonDocument playListItemData = JsonDocument.Parse(playList, new JsonDocumentOptions { AllowTrailingCommas = true });
 
         JsonElement playListItemDataroot = playListItemData.RootElement;
@@ -104,11 +108,17 @@ class CollectData
             videoDB = db.Query<Video>("select * from videos");
         }
 
-
-        foreach (var video in playListItemDataitems.EnumerateArray())
+        var v = playListItemDataitems.EnumerateArray().Select((value, i) => (i, value));
+        foreach (var (i, video) in v)
         {
-            string? title = video.GetProperty("snippet").GetProperty("title").GetString();
-            string? id = video.GetProperty("snippet").GetProperty("resourceId").GetProperty("videoId").GetString();
+            string? title = video.GetProperty("snippet")
+                                 .GetProperty("title")
+                                 .GetString()!
+                                 .Replace("\n", "");
+            string? id = video.GetProperty("snippet")
+                              .GetProperty("resourceId")
+                              .GetProperty("videoId")
+                              .GetString();
 
 
             HttpClient client = new();
@@ -120,7 +130,7 @@ class CollectData
                 var data = resRoot.GetProperty("items").EnumerateArray().ToArray();
                 if (data.Count() == 0)
                 {
-                    Console.WriteLine($"影片id: {id}未找到");
+                    title = "No Found";
                     continue;
                 }
 
@@ -156,8 +166,7 @@ class CollectData
                 }
             }
 
-
-            Console.WriteLine($"影片 {title}\nid: {id}\nok！\n");
+            Console.WriteLine($"[{i + 1}/{v.Count()}] {id} - {title}！");
         }
 
         await File.WriteAllTextAsync(
