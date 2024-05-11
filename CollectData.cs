@@ -67,15 +67,22 @@ class CollectData
                                                 q => q.FirstOrDefault()!,       // assert that the length is greater than 2
                                                 q => q.Skip(1).FirstOrDefault()!
                                               );
-        
+
         UriBuilder apiUrl = new($"https://youtube.googleapis.com/youtube/v3/playlists?part=snippet&maxResults=50&id={playListUrlArguments!["list"]}&key={apiKey}");
 
-        HttpClient client = new();
-        var res = await client.GetStringAsync(apiUrl.Uri);
-        var json = JsonDocument.Parse(res, new JsonDocumentOptions { AllowTrailingCommas = true });
+        try
+        {
+            HttpClient client = new();
+            var res = await client.GetStringAsync(apiUrl.Uri);
+            var json = JsonDocument.Parse(res, new JsonDocumentOptions { AllowTrailingCommas = true });
 
-        Console.WriteLine("collect PlayListData complete");
-        return json;
+            Console.WriteLine("collect PlayListData complete");
+            return json;
+        }
+        catch (System.Exception)
+        {
+            throw;
+        }
     }
 
     public static async Task Invoke(string playListURL, string apiKey, string pageToken = "")
