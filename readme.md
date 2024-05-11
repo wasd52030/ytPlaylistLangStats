@@ -18,3 +18,5 @@
     - ytPlayListLangStats stat
 
 **請將`appsettings_1.json`中的YoutubeAPIKey填上自己的Youtube Data Api Key，並將檔名改成`appsettings.json`**
+
+**本專案有加 github actions 做自動收集資料，在動程式之前記得做 pull 之類的動作**
