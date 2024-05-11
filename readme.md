@@ -9,18 +9,18 @@
 - download: 初步下載統整播放清單中的語言,存入`viedos.json`
   - parameters:
     - --pl: youtube播放清單網址，預設值為[這組](https://www.youtube.com/playlist?list=PLdx_s59BrvfXJXyoU5BHpUkZGmZL0g3Ip)
-    - --ytkey: youtube api key，預設從這個參數拿，拿不到會往 `appsettings.json` 找
   - Example
     - dotnet run download --pl youtubePlaylistURL
     - ytPlayListLangStats download --pl youtubePlaylistURL
 - stat : 計算viedos.json中的語言種類與各有幾支影片，輸出到`result.json`
   - parameters:
     - --pl: youtube播放清單網址，預設值為[這組](https://www.youtube.com/playlist?list=PLdx_s59BrvfXJXyoU5BHpUkZGmZL0g3Ip)
-    - --ytkey: youtube api key，預設從這個參數拿，拿不到會往 `appsettings.json` 找 
   - Example
-    - dotnet run stat 
-    - ytPlayListLangStats stat
+    - dotnet run stat --pl youtubePlaylistURL
+    - ytPlayListLangStats stat --pl youtubePlaylistURL
 
 **請將`appsettings_1.json`中的YoutubeAPIKey填上自己的Youtube Data Api Key，並將檔名改成`appsettings.json`**
+
+**youtube api key，預設會往環境變數 `YoutubeAPIKey` 取，拿不到會往 `appsettings.json` 找**
 
 **本專案有加 github actions 做自動收集資料，在動程式之前記得做 pull 之類的動作**
