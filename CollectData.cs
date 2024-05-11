@@ -67,7 +67,10 @@ class CollectData
                                                 q => q.FirstOrDefault()!,       // assert that the length is greater than 2
                                                 q => q.Skip(1).FirstOrDefault()!
                                               );
-        Console.WriteLine(apiKey);
+        Console.WriteLine(apiKey=="");
+        Console.WriteLine(apiKey.Length);
+        Console.WriteLine(apiKey == null);
+        
         UriBuilder apiUrl = new($"https://youtube.googleapis.com/youtube/v3/playlists?part=snippet&maxResults=50&id={playListUrlArguments!["list"]}&key={apiKey}");
         Console.WriteLine(apiUrl.Uri);
         HttpClient client = new();
