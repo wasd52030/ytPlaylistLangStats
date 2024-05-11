@@ -35,7 +35,7 @@ async Task main()
     downloadCommand.SetHandler(async (PlaylistOption) =>
     {
         var apiKey = Environment.GetEnvironmentVariable("YoutubeAPIKey") ?? config.apiKey;
-        await CollectData.Invoke(PlaylistOption, config.apiKey);
+        await CollectData.Invoke(PlaylistOption, apiKey);
     }, PlaylistOption);
 
     // stat command
@@ -46,7 +46,7 @@ async Task main()
     rootCommand.AddCommand(statCommand);
     statCommand.SetHandler(async (PlaylistOption) =>
     {
-        var apiKey = Environment.GetEnvironmentVariable("YoutubeAPIKey") ?? config.apiKey;;
+        var apiKey = Environment.GetEnvironmentVariable("YoutubeAPIKey") ?? config.apiKey;
         await DataAnalysis.Invoke(PlaylistOption, apiKey);
     }, PlaylistOption);
 

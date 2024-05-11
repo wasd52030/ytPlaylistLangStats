@@ -73,11 +73,8 @@ class CollectData
         try
         {
             HttpClient client = new();
-            var k = apiUrl.Uri;
-            Console.WriteLine(k);
             var res = await client.GetStringAsync(apiUrl.Uri);
             var json = JsonDocument.Parse(res, new JsonDocumentOptions { AllowTrailingCommas = true });
-
             Console.WriteLine("collect PlayListData complete");
             return json;
         }
