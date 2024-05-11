@@ -13,9 +13,9 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
+    permissions:
+        contents: write
     steps:
     - name: Install cjk font
       run: sudo apt-get install fonts-noto-cjk
