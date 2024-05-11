@@ -69,7 +69,7 @@ class CollectData
                                               );
 
         UriBuilder apiUrl = new($"https://youtube.googleapis.com/youtube/v3/playlists?part=snippet&maxResults=50&id={playListUrlArguments!["list"]}&key={apiKey}");
-
+        Console.WriteLine(apiUrl.Uri);
         HttpClient client = new();
         var res = await client.GetStringAsync(apiUrl.Uri);
         var json = JsonDocument.Parse(res, new JsonDocumentOptions { AllowTrailingCommas = true });
