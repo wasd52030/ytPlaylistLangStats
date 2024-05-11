@@ -19,32 +19,40 @@ async Task main()
     // root command
     var rootCommand = new RootCommand("youtube播放清單語言統計");
 
-    
-    var playlistOption = new Option<string>
+
+    var PlaylistOption = new Option<string>
     (aliases: new string[] { "--playlist", "--pl" },
     description: "youtube playlist url",
     getDefaultValue: () => "https://www.youtube.com/playlist?list=PLdx_s59BrvfXJXyoU5BHpUkZGmZL0g3Ip");
 
+    var YoutubeAPIKeyOption = new Option<string>(aliases: new string[] { "--ytkey" }, description: "youtube playlist url");
+
     // download command
-    var downloadCommand = new Command(name: "download", description: "初步下載統整播放清單中的語言");
-    downloadCommand.AddOption(playlistOption);
+    var downloadCommand = new Command(name: "download", description: "初步下載統整播放清單中的語言")
+    {
+        PlaylistOption,
+        YoutubeAPIKeyOption
+    };
     rootCommand.AddCommand(downloadCommand);
 
-    downloadCommand.SetHandler(async (playlistOption) =>
+    downloadCommand.SetHandler(async (PlaylistOption, YoutubeAPIKeyOption) =>
     {
-        await CollectData.Invoke(playlistOption, config.apiKey);
-    }, playlistOption);
+        var apiKey = YoutubeAPIKeyOption ?? config.apiKey;
+        await CollectData.Invoke(PlaylistOption, config.apiKey);
+    }, PlaylistOption, YoutubeAPIKeyOption);
 
     // stat command
-    var statCommand = new Command(name: "stat", description: "進行統計，並輸出json檔與sqlite檔")
+    var statCommand = new Command(name: "stat", description: "進行統計")
     {
-        playlistOption
+        PlaylistOption,
+        YoutubeAPIKeyOption
     };
     rootCommand.AddCommand(statCommand);
-    statCommand.SetHandler(async (playlistOption) =>
+    statCommand.SetHandler(async (PlaylistOption, YoutubeAPIKeyOption) =>
     {
-        await DataAnalysis.Invoke(playlistOption, config.apiKey);
-    }, playlistOption);
+        var apiKey = YoutubeAPIKeyOption ?? config.apiKey;
+        await DataAnalysis.Invoke(PlaylistOption, apiKey);
+    }, PlaylistOption, YoutubeAPIKeyOption);
 
     await rootCommand.InvokeAsync(args);
 }
