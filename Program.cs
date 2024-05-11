@@ -35,6 +35,7 @@ async Task main()
     downloadCommand.SetHandler(async (PlaylistOption) =>
     {
         var apiKey = Environment.GetEnvironmentVariable("YoutubeAPIKey") ?? config.apiKey;
+        Console.WriteLine(apiKey==null);
         await CollectData.Invoke(PlaylistOption, config.apiKey);
     }, PlaylistOption);
 
