@@ -136,11 +136,9 @@ class CollectData
                 var data = resRoot.GetProperty("items").EnumerateArray().ToArray();
                 if (data.Count() == 0)
                 {
-                    title = "Not Found";
-                    continue;
+                    title = $"{title} - Not Found";
                 }
-
-                if (videoDB != null)
+                else if (videoDB != null)
                 {
                     var exists = videoDB.FirstOrDefault(v => v.id == id);
                     if (exists != null)
