@@ -19,11 +19,11 @@
     - dotnet run stat --pl youtubePlaylistURL
     - ytPlayListLangStats stat --pl youtubePlaylistURL
 
+# Todo
+- [ ] 研究怎麼將 resources 裡面的檔案引入 github action 供統計比對使用
+
 **請將`appsettings_1.json`中的YoutubeAPIKey填上自己的Youtube Data Api Key，並將檔名改成`appsettings.json`**
 
 **youtube api key，預設會往環境變數 `YoutubeAPIKey` 取，拿不到會往 `appsettings.json` 找**
 
 **本專案有加 github actions 做自動收集資料，在動程式之前記得做 pull 之類的動作**
-
-# Todo
-- [ ] 研究怎麼將 resources 裡面的檔案引入 github action 供統計比對使用
