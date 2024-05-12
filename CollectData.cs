@@ -172,7 +172,8 @@ class CollectData
                 }
             }
 
-            Console.WriteLine($"[{i + 1}/{v.Count()}] {id} - {title}！");
+            // reference -> https://learn.microsoft.com/zh-tw/dotnet/standard/base-types/standard-numeric-format-strings
+            Console.WriteLine($"[{i + 1:D4}/{v.Count():D4}] {id} - {title}！");
         }
 
         await File.WriteAllTextAsync(
