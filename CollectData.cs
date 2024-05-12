@@ -136,7 +136,7 @@ class CollectData
                 var data = resRoot.GetProperty("items").EnumerateArray().ToArray();
                 if (data.Count() == 0)
                 {
-                    title = "No Found";
+                    title = "Not Found";
                     continue;
                 }
 
