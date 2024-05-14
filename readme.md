@@ -20,7 +20,9 @@
     - ytPlayListLangStats stat --pl youtubePlaylistURL
 
 # Todo
-- [ ] 研究怎麼將 resources 裡面的檔案引入 github action 供統計比對使用
+- [x] 研究怎麼將 resources 裡面的檔案引入 github action 供統計比對使用
+  - 發現是 github action step問題，要先出最後的統計數據(stat)再更新來源(download)
+  - 否則在 local 端的更新會被直接蓋過去
 
 **請將`appsettings_1.json`中的YoutubeAPIKey填上自己的Youtube Data Api Key，並將檔名改成`appsettings.json`**
 
