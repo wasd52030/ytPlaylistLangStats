@@ -17,6 +17,8 @@ jobs:
     permissions:
         contents: write
     steps:
+    - name: load resources
+      uses: actions/checkout@v4
     - name: install tree
       run: sudo apt install tree
     - name: tree
