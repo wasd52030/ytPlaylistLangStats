@@ -35,14 +35,14 @@ jobs:
       env:
         YoutubeAPIKey: ${{ secrets.YOUTUBEAPIKEY }}
       run: |
-        dotnet /home/runner/work/ytPlaylistLangStats/ytPlaylistLangStats/bin/Release/net6.0/ytPlaylistLangStats.dll download
         dotnet /home/runner/work/ytPlaylistLangStats/ytPlaylistLangStats/bin/Release/net6.0/ytPlaylistLangStats.dll stat
+        dotnet /home/runner/work/ytPlaylistLangStats/ytPlaylistLangStats/bin/Release/net6.0/ytPlaylistLangStats.dll download
     - name: Update statistics for https://www.youtube.com/playlist?list=PLdx_s59BrvfVJdXVitsPHvXavY7Z-NhQx
       env:
         YoutubeAPIKey: ${{ secrets.YOUTUBEAPIKEY }}
       run: |
-        dotnet /home/runner/work/ytPlaylistLangStats/ytPlaylistLangStats/bin/Release/net6.0/ytPlaylistLangStats.dll download --pl https://www.youtube.com/playlist?list=PLdx_s59BrvfVJdXVitsPHvXavY7Z-NhQx
         dotnet /home/runner/work/ytPlaylistLangStats/ytPlaylistLangStats/bin/Release/net6.0/ytPlaylistLangStats.dll stat --pl https://www.youtube.com/playlist?list=PLdx_s59BrvfVJdXVitsPHvXavY7Z-NhQx
+        dotnet /home/runner/work/ytPlaylistLangStats/ytPlaylistLangStats/bin/Release/net6.0/ytPlaylistLangStats.dll download --pl https://www.youtube.com/playlist?list=PLdx_s59BrvfVJdXVitsPHvXavY7Z-NhQx
     - name: Commit files
       id: commit
       run: |
