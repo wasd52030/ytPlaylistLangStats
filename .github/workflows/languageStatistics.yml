@@ -20,4 +20,4 @@ jobs:
     - name: install tree
       run: sudo apt install tree
     - name: tree
-      run: tree tree /home/runner/work/ytPlaylistLangStats/ytPlaylistLangStats
+      run: tree tree /home/runner/work/ytPlaylistLangStats
