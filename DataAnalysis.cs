@@ -45,8 +45,8 @@ class DataAnalysis
         {
             db.Execute(@"create table videos (id TEXT PRIMARY KEY,title TEXT,lang TEXT)");
         }
-        var v=db.Query<Video>("select * from videos");
-        foreach (var vi in v)
+        var vw=db.Query<Video>("select * from videos");
+        foreach (var vi in vw)
         {
             Console.WriteLine(vi);
         }
