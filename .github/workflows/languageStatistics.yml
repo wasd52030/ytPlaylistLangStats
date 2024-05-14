@@ -6,6 +6,9 @@ name: language statistics
 on:
   push:
     branches: [ "master" ]
+    paths:
+      - .github/workflows/contributorStatistics.yml
+      - resources/*    
   pull_request:
     branches: [ "master" ]
   schedule: # execute every 24 hours
