@@ -128,12 +128,9 @@ class DataAnalysis
             Labels: plotSeq.Select(item => item.Key).ToList()
         );
 
+        // reference -> https://stackoverflow.com/questions/72504275/make-chart-fill-size-of-browser-window
         pie.WithTitle($"詳細資訊請參考同名的json檔！")
-           .WithConfig(
-                Plotly.NET.Config.init(
-                    Responsive: true
-                )
-            )
-           .SavePNG($"./resources/{ch}-{playListtitle}_result", Width: 700, Height: 450);
+           .WithConfig(Config.init(Responsive: true))
+           .SavePNG($"./resources/{ch}-{playListtitle}_result", Width: 1200, Height: 800);
     }
 }
