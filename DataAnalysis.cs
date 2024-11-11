@@ -1,6 +1,5 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Unicode;
 using System.Data.SQLite;
 using Dapper;
 using MoreLinq;
@@ -10,9 +9,9 @@ using Plotly.NET;
 
 class DataAnalysis
 {
-    public static async Task Invoke(string playListURL, string apiKey)
+    public static async Task Invoke(string playListUrl, string apiKey)
     {
-        using JsonDocument playListData = await CollectData.GetPlayListData(playListURL, apiKey);
+        using JsonDocument playListData = await CollectData.GetPlayListData(playListUrl, apiKey);
         JsonElement playListDataRoot = playListData.RootElement;
         var playListDataitems = playListDataRoot.GetProperty("items")[0];
 
@@ -32,9 +31,10 @@ class DataAnalysis
 
         var baseSeq = videos.GroupBy(v => v.lang)
                          .OrderByDescending(item => item.Count())
-                         .ThenBy(item => item.Key);
+                         .ThenBy(item => item.Key)
+                         .ToList();
 
-        await MakeJSON(baseSeq, ch, playListtitle);
+        await MakeJson(baseSeq, ch, playListtitle);
         MakePieChart(baseSeq, ch, playListtitle);
     }
 
@@ -66,7 +66,7 @@ class DataAnalysis
 
         // 確保資料庫的東西跟播放清單一致
         var videos = db.Query<Video>("select * from videos");
-        var diff = videos.ExceptBy(json.items, video => video.id);
+        var diff = videos.ExceptBy(json.items, video => video.id).ToList();
         if (diff.Any())
         {
             foreach (var video in diff)
@@ -78,7 +78,7 @@ class DataAnalysis
         }
     }
 
-    static async Task MakeJSON(IOrderedEnumerable<IGrouping<string, Video>> baseSeq, string ch, string playListtitle)
+    static async Task MakeJson(List<IGrouping<string, Video>> baseSeq, string ch, string playListtitle)
     {
         var stat = baseSeq.ToDictionary(o => o.Key, o => (double)o.Count());
         stat.Add("total", stat.Values.Sum());
@@ -98,24 +98,23 @@ class DataAnalysis
         Console.WriteLine($"playlist {ch}-{playListtitle} stat success！");
     }
 
-    public static void MakePieChart(IOrderedEnumerable<IGrouping<string, Video>> baseSeq, string ch, string playListtitle)
+    public static void MakePieChart(List<IGrouping<string, Video>> baseSeq, string ch, string playListtitle)
     {
         var plotSeq = baseSeq.Select(item => new { key = item.Key, count = item.Count() })
                              .GroupBy(item => item.count)
                              .Select(item =>
                              {
-                                 var seq = item.Select(item => item);
                                  var s = string.Join(
                                     ", ",
-                                    seq.Select(item => item.key)
+                                    item.Select(item => item.key)
                                        .OrderBy(item => item.Length)
                                        .ThenBy(item => item)
                                        .Take(4)
                                  );
 
-                                 if (seq.Count() > 4)
+                                 if (item.Count() > 4)
                                  {
-                                     s = $"{s}, ... 等{seq.Count()}種";
+                                     s = $"{s}, ... 等{item.Count()}種";
                                  }
 
                                  var m = item.Count() * item.Key;
