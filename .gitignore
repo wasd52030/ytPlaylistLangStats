@@ -480,5 +480,9 @@ $RECYCLE.BIN/
 ## publish directory
 dist/
 
+# JetBrains Rider
+.idea/
+*.sln.iml
+
 
 appsettings.json
