@@ -1,9 +1,149 @@
 {
   "items": [
     {
+      "id": "f3lWn4G3a8g",
+      "title": "【AIきりたん】Säkkijärven polkka【日本語吹き替版】",
+      "lang": "日"
+    },
+    {
+      "id": "wtaFy7xwb2s",
+      "title": "【NEUTRINO】フリードリヒ大王の歌/Fridericus Rex Grenadiermarsch（東北きりたん）",
+      "lang": "日"
+    },
+    {
+      "id": "5k0jscnd2Ws",
+      "title": "【NEUTRINO】砲兵の歌/The Artilleryman's Song（東北きりたん）",
+      "lang": "日"
+    },
+    {
+      "id": "dizJ43b1M-M",
+      "title": "Сигарета",
+      "lang": "俄"
+    },
+    {
+      "id": "AKblYC-P8AQ",
+      "title": "\uD83C\uDFB6 [遊戯王] 熱き決闘者たち / 光宗信吉 [Fingerstyle Guitar TAB] \uD83C\uDFB8",
+      "lang": "純音樂"
+    },
+    {
+      "id": "KYh6RDtaeB8",
+      "title": "\uD83C\uDFB6 [ボカロ] 深海少女 / ゆうゆ [Fingerstyle Guitar TAB] \uD83C\uDFB8",
+      "lang": "純音樂"
+    },
+    {
+      "id": "IFlaShCuAD0",
+      "title": "\uD83C\uDFB6 [ボカロ] 心做し / 蝶々P [Fingerstyle Guitar TAB] \uD83C\uDFB8",
+      "lang": "純音樂"
+    },
+    {
+      "id": "18kcOlCEoZY",
+      "title": "\uD83C\uDFB6 [ボカロ] 炉心融解 / iroha(sasaki) [Fingerstyle Guitar TAB] \uD83C\uDFB8",
+      "lang": "純音樂"
+    },
+    {
+      "id": "iUBgtK2Y-f4",
+      "title": "\uD83C\uDFB6 [葬送のフリーレン] 晴る / ヨルシカ [Fingerstyle Guitar TAB] \uD83C\uDFB8",
+      "lang": "純音樂"
+    },
+    {
+      "id": "GBKL2qQhrW8",
+      "title": "海のまにまに / YOASOBI [ソロギター TAB譜面]",
+      "lang": "純音樂"
+    },
+    {
+      "id": "mx9TRhmh4L8",
+      "title": "[ひぐらしのなく頃に] you / 癒月 [ソロギター TAB譜面]",
+      "lang": "純音樂"
+    },
+    {
+      "id": "5s9oZznS8h0",
+      "title": "月光花 / Janne Da Arc [ソロギター TAB譜面]",
+      "lang": "純音樂"
+    },
+    {
+      "id": "E4TnK2Vq3PM",
+      "title": "パレード / ヨルシカ [ソロギター TAB譜面]",
+      "lang": "純音樂"
+    },
+    {
+      "id": "-Z_jsAy2Zg8",
+      "title": "\uD83C\uDFB6 [魔法少女まどか☆マギカ] Sis Puella Magica! / 梶浦 由記 [Fingerstyle Guitar TAB] \uD83C\uDFB8",
+      "lang": "純音樂"
+    },
+    {
+      "id": "qIz6v9xIDw8",
+      "title": "明日への扉/I WiSH[ソロギター TAB譜面]",
+      "lang": "純音樂"
+    },
+    {
+      "id": "Op36Jx5oyGc",
+      "title": "風を食む / ヨルシカ [ソロギター TAB譜面]",
+      "lang": "純音樂"
+    },
+    {
+      "id": "lsXnhk8xuag",
+      "title": "言って。 / ヨルシカ [ソロギター TAB譜面]",
+      "lang": "純音樂"
+    },
+    {
+      "id": "CSex6hdQljI",
+      "title": "[泣きたい私は猫をかぶる] 花に亡霊 / ヨルシカ [ソロギター TAB譜面]",
+      "lang": "純音樂"
+    },
+    {
+      "id": "M0uGAVBPId0",
+      "title": "ヒッチコック / ヨルシカ [ソロギター TAB譜面]",
+      "lang": "純音樂"
+    },
+    {
+      "id": "ValI3vjpxiU",
+      "title": "アイネクライネ / 米津玄師 [ソロギター TAB譜面]",
+      "lang": "純音樂"
+    },
+    {
+      "id": "aj8L-rVkopU",
+      "title": "ただ君に晴れ / ヨルシカ [ソロギター TAB譜面]",
+      "lang": "純音樂"
+    },
+    {
+      "id": "XnjfC4EzKzI",
+      "title": "\uD83C\uDFB6 [ボカロ] 弱虫モンブラン / DECO*27 [Fingerstyle Guitar TAB] \uD83C\uDFB8",
+      "lang": "純音樂"
+    },
+    {
+      "id": "R6Gvmbi2tVU",
+      "title": "\uD83C\uDFB6 [ボカロ] ウミユリ海底譚 / n-buna [Fingerstyle Guitar TAB] \uD83C\uDFB8",
+      "lang": "純音樂"
+    },
+    {
+      "id": "dEOtqFKK0Is",
+      "title": "チャーリイ / エイハブ",
+      "lang": "純音樂"
+    },
+    {
+      "id": "Rq2uLHAKyzo",
+      "title": "【NEUTRINO】フランス国歌「ラ・マルセイエーズ」/La Marseillaise（東北きりたん・琴葉茜）",
+      "lang": "日"
+    },
+    {
+      "id": "jTeFBPIuZYA",
+      "title": "[まどマギ] コネクト / ClariS [ソロギター TAB譜面]",
+      "lang": "純音樂"
+    },
+    {
+      "id": "0wFEKTetKwI",
+      "title": "所以我放棄了坷垃",
+      "lang": "中"
+    },
+    {
       "id": "u3T0ZwDEBOM",
       "title": "慟！電視台看不到最優質中立的新聞了",
       "lang": "中"
+    },
+    {
+      "id": "HdQSWSNwpy8",
+      "title": "【東ドイツ国歌】廃墟からの復活（日本語歌詞付き）【ガルパン】",
+      "lang": "日"
     },
     {
       "id": "egqDPipqIAg",
