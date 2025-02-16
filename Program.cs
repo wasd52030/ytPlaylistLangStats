@@ -47,6 +47,7 @@ async Task main()
 {
     Console.OutputEncoding = System.Text.Encoding.UTF8;
 
+    // reference -> https://blog.darkthread.net/blog/appsetting-fallback-in-console-app/
     IConfiguration configuration = new ConfigurationBuilder()
                                        .AddEnvironmentVariables()
                                        .SetBasePath(Directory.GetCurrentDirectory())
