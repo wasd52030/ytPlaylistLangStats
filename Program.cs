@@ -48,9 +48,10 @@ async Task main()
     Console.OutputEncoding = System.Text.Encoding.UTF8;
 
     IConfiguration configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-            .Build();
+                                       .AddEnvironmentVariables()
+                                       .SetBasePath(Directory.GetCurrentDirectory())
+                                       .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                                       .Build();
 
     Configure config = new()
     {
@@ -76,7 +77,8 @@ async Task main()
 
     downloadCommand.SetHandler(async (PlaylistOption) =>
     {
-        var apiKey = Environment.GetEnvironmentVariable("YoutubeAPIKey") ?? config.apiKey;
+        // var apiKey = Environment.GetEnvironmentVariable("YoutubeAPIKey") ?? config.apiKey;
+        var apiKey = config.apiKey;
         await CollectData.Invoke(PlaylistOption, apiKey);
     }, PlaylistOption);
 
@@ -88,7 +90,8 @@ async Task main()
     rootCommand.AddCommand(statCommand);
     statCommand.SetHandler(async (PlaylistOption) =>
     {
-        var apiKey = Environment.GetEnvironmentVariable("YoutubeAPIKey") ?? config.apiKey;
+        // var apiKey = Environment.GetEnvironmentVariable("YoutubeAPIKey") ?? config.apiKey;
+        var apiKey = config.apiKey;
         await DataAnalysis.Invoke(PlaylistOption, apiKey);
     }, PlaylistOption);
 
