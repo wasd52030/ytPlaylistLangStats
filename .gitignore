@@ -486,3 +486,5 @@ dist/
 
 
 appsettings.json
+
+.vscode
