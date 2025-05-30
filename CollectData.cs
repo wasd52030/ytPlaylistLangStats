@@ -114,7 +114,8 @@ class CollectData
             videoDB = db.Query<Video>("select * from videos");
         }
 
-        var v = playListItemDataitems.EnumerateArray().Select((value, i) => (i, value));
+        var v = playListItemDataitems.EnumerateArray().Index();
+        
         foreach (var (i, video) in v)
         {
             string? title = video.GetProperty("snippet")
