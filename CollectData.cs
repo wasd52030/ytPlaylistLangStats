@@ -114,9 +114,8 @@ class CollectData
             videoDB = db.Query<Video>("select * from videos");
         }
 
-        var v = playListItemDataitems.EnumerateArray().Index();
-        
-        foreach (var (i, video) in v)
+        var PlayListAPI = playListItemDataitems.EnumerateArray().Index();
+        foreach (var (i, video) in PlayListAPI)
         {
             string? title = video.GetProperty("snippet")
                                  .GetProperty("title")
@@ -172,7 +171,7 @@ class CollectData
             }
 
             // reference -> https://learn.microsoft.com/zh-tw/dotnet/standard/base-types/standard-numeric-format-strings
-            Console.WriteLine($"[{i + 1:D4}/{v.Count():D4}] {id} - {title}！");
+            Console.WriteLine($"[{i + 1:D4}/{PlayListAPI.Count():D4}] {id} - {title}！");
         }
 
         await File.WriteAllTextAsync(
