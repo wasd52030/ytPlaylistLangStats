@@ -108,7 +108,7 @@ class DataAnalysis
 
                                  if (item.Count() / total < 0.05)
                                  {
-                                     s = "others";
+                                    s = "others";
                                  }
 
                                  var m = item.Count() * item.Count();
