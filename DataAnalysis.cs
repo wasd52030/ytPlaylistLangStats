@@ -100,27 +100,23 @@ class DataAnalysis
 
     public static void MakePieChart(List<IGrouping<string, Video>> baseSeq, string ch, string playListtitle)
     {
-        var plotSeq = baseSeq.Select(item => new { key = item.Key, count = item.Count() })
-                             .GroupBy(item => item.count)
-                             .Select(item =>
-                             {
-                                 var s = string.Join(
-                                    ", ",
-                                    item.Select(item => item.key)
-                                       .OrderBy(item => item.Length)
-                                       .ThenBy(item => item)
-                                       .Take(4)
-                                 );
+        var total = baseSeq.Aggregate(0d, (past, curr) => past + curr.Count());
 
-                                 if (item.Count() > 4)
+        var plotSeq = baseSeq.Select(item =>
+                             {
+                                 var s = item.Key;
+
+                                 if (item.Count() / total < 0.05)
                                  {
-                                     s = $"{s}, ... 等{item.Count()}種";
+                                     s = "others";
                                  }
 
-                                 var m = item.Count() * item.Key;
-                                 return (s, m);
+                                 var m = item.Count() * item.Count();
+                                 return (s, item.Count());
                              })
-                             .ToDictionary(item => item.Item1, item => (double)item.Item2);
+                             .GroupBy(item => item.s)
+                             .Select(item => (item.Key, item.Sum(item => item.Item2)))
+                             .ToDictionary(item => item.Key, item => (double)item.Item2);
 
         var pie = Plotly.NET.CSharp.Chart.Pie<double, string, string>(
             values: plotSeq.Select(item => item.Value).ToList(),
