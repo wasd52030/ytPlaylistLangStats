@@ -38,7 +38,7 @@ class DataAnalysis
         MakePieChart(baseSeq, ch, playListtitle);
     }
 
-    public static void MaintainDatabase(Videos? json, string dbPath)
+    static void MaintainDatabase(Videos? json, string dbPath)
     {
         using var db = new SQLiteConnection("data source=" + dbPath);
         if (!File.Exists(dbPath))
@@ -98,7 +98,7 @@ class DataAnalysis
         Console.WriteLine($"playlist {ch}-{playListtitle} stat success！");
     }
 
-    public static void MakePieChart(List<IGrouping<string, Video>> baseSeq, string ch, string playListtitle)
+    static void MakePieChart(List<IGrouping<string, Video>> baseSeq, string ch, string playListtitle)
     {
         var total = baseSeq.Aggregate(0d, (past, curr) => past + curr.Count());
 
