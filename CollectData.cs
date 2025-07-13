@@ -6,6 +6,8 @@ using MoreLinq;
 
 class CollectData
 {
+    private static readonly HttpClient httpClient = new();
+
     // return full api result
     public static async Task<string> GetPlayListItemData(string url, List<JsonElement> videoList, string apiKey, string pageToken = "", int i = 0)
     {
@@ -25,8 +27,7 @@ class CollectData
             apiUrl.Query = string.Concat(apiUrl.Query.AsSpan(1), "&", $"pageToken={pageToken}");
         }
 
-        HttpClient client = new();
-        var res = await client.GetStringAsync(apiUrl.Uri);
+        var res = await httpClient.GetStringAsync(apiUrl.Uri);
         using JsonDocument json = JsonDocument.Parse(res, new JsonDocumentOptions { AllowTrailingCommas = true });
         JsonElement root = json.RootElement;
         JsonElement items = root.GetProperty("items");
@@ -72,8 +73,7 @@ class CollectData
 
         try
         {
-            HttpClient client = new();
-            var res = await client.GetStringAsync(apiUrl.Uri);
+            var res = await httpClient.GetStringAsync(apiUrl.Uri);
             var json = JsonDocument.Parse(res, new JsonDocumentOptions { AllowTrailingCommas = true });
             Console.WriteLine("collect PlayListData complete");
             return json;
@@ -126,10 +126,8 @@ class CollectData
                               .GetProperty("videoId")
                               .GetString();
 
-
-            HttpClient client = new();
             string url = $"https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id={id}&key={apiKey}";
-            var res = await client.GetStringAsync(url);
+            var res = await httpClient.GetStringAsync(url);
             using (JsonDocument apiRes = JsonDocument.Parse(res, new JsonDocumentOptions { AllowTrailingCommas = true }))
             {
                 JsonElement resRoot = apiRes.RootElement;
