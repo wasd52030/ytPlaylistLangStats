@@ -1,6 +1,11 @@
 {
   "items": [
     {
+      "id": "iXk8QXhr7Fk",
+      "title": "Кукушка",
+      "lang": "ru"
+    },
+    {
       "id": "fJe_D-egyGk",
       "title": "Zzz",
       "lang": "ja"
@@ -576,11 +581,6 @@
       "lang": "日"
     },
     {
-      "id": "ESThYMHFW2c",
-      "title": "中華民国 国旗歌【小春六花 SV】【中国標準語歌唱】",
-      "lang": "中"
-    },
-    {
       "id": "5CAhLinTvvQ",
       "title": "[クラシック]Canon in D Major(パッヘルベルのカノン)/Johann Pachelbel[ソロギター TAB譜面]",
       "lang": "純音樂"
@@ -846,24 +846,9 @@
       "lang": "韓"
     },
     {
-      "id": "3Ue4kyHT-fw",
-      "title": "【NEUTRINO】ラデツキー行進曲/Radetzky March（東北きりたん）",
-      "lang": "日"
-    },
-    {
       "id": "xXQNdUpCQzw",
       "title": "Island Song (Come Along with Me) (feat. Ashley Eriksson)",
       "lang": "英"
-    },
-    {
-      "id": "f3lWn4G3a8g",
-      "title": "【AIきりたん】Säkkijärven polkka【日本語吹き替版】",
-      "lang": "日"
-    },
-    {
-      "id": "5k0jscnd2Ws",
-      "title": "【NEUTRINO】砲兵の歌/The Artilleryman's Song（東北きりたん）",
-      "lang": "日"
     },
     {
       "id": "dizJ43b1M-M",
@@ -1636,11 +1621,6 @@
       "lang": "日"
     },
     {
-      "id": "bPy2szBO8pU",
-      "title": "Connect (Instrumental)",
-      "lang": "純音樂"
-    },
-    {
       "id": "buAyUUEETcE",
       "title": "Sis Puella Magica!",
       "lang": "純音樂"
@@ -1699,11 +1679,6 @@
       "id": "MtwWoZ9vfJk",
       "title": "Johnny Boy",
       "lang": "德"
-    },
-    {
-      "id": "Kvwpe4StruQ",
-      "title": "【 Cover 】康士坦的變化球 KST - 美好的事可不可以發生在我身上 Lucky As You",
-      "lang": "中"
     },
     {
       "id": "og42YD8cYBs",
@@ -1934,11 +1909,6 @@
       "id": "AHZJh5P15i4",
       "title": "Destiny -太陽の花-",
       "lang": "日"
-    },
-    {
-      "id": "_TM0Dv3wM4Q",
-      "title": "夜襲 - Night Raid",
-      "lang": "中"
     },
     {
       "id": "S32A68Zm6KY",
