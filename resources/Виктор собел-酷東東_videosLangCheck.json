@@ -1,6 +1,51 @@
 {
   "items": [
     {
+      "id": "gFIJ3lRmvKs",
+      "title": "【off vocal】パレード / ヨルシカ Arranged by 萩",
+      "lang": "ja"
+    },
+    {
+      "id": "3vHuOXeWJqo",
+      "title": "【cover】secret base 〜君がくれたもの〜 / ZONE feat. にゃあこ。",
+      "lang": "ja"
+    },
+    {
+      "id": "JdVHHaTVXtE",
+      "title": "【ピアノ伴奏】心做し / 蝶々P - piano ver. arranged by 萩",
+      "lang": "ja"
+    },
+    {
+      "id": "ACJ5-udeGBo",
+      "title": "【off vocal】命に嫌われている。 / カンザキイオリ - arranged by 萩",
+      "lang": "ja"
+    },
+    {
+      "id": "tohAdHPjhe0",
+      "title": "【off vocal】エルマ / ヨルシカ - piano ver. arranged by 萩",
+      "lang": "ja"
+    },
+    {
+      "id": "I1b3-JKAkFk",
+      "title": "【ピアノ伴奏】天ノ弱 / 164 - piano ver. arranged by 萩",
+      "lang": "ja"
+    },
+    {
+      "id": "ywApEyIZg_4",
+      "title": "S.T.A.L.K.E.R. OST - Кино - Кукушка - Fingerstyle Guitar Cover + TABS",
+      "lang": "en"
+    },
+    {
+      "id": "uoL_7cX0pCQ",
+      "title": "贖罪\u3000/  feat. VOCALOIDs",
+      "lang": "ja"
+    },
+    {
+      "id": "2C2fAU9fn-U",
+      "title": "【初音ミクDark】\u3000青を焚べて\u3000【 keeno 】",
+      "lang": "ja"
+    },
+    {
       "id": "UI8Iy7kmRxo",
       "title": "Oblivious",
       "lang": "日"
@@ -399,11 +444,6 @@
       "id": "SNXZDkhb_q8",
       "title": "勞動者靈歌",
       "lang": "粵"
-    },
-    {
-      "id": "hLQiyx0AmVs",
-      "title": "青を焚べて | Kaili Umis Cover",
-      "lang": "日"
     },
     {
       "id": "-M4sAQYi6r4",
@@ -811,18 +851,8 @@
       "lang": "英"
     },
     {
-      "id": "_ymRYcyJ4GE",
-      "title": "冬の花\u3000宮本浩次\u3000カバー",
-      "lang": "日"
-    },
-    {
       "id": "6ZjgzePvoyg",
       "title": "Nothing Ventured, Nothing Gained (vocal version)",
-      "lang": "日"
-    },
-    {
-      "id": "-fthO8wB65A",
-      "title": "【NEUTRINO】英国擲弾兵(British grenadiers)\u3000日本語訳詞【東北ずん子】",
       "lang": "日"
     },
     {
@@ -1041,11 +1071,6 @@
       "lang": "純音樂"
     },
     {
-      "id": "P4W_ihYlWW4",
-      "title": "【リメイク】『ブリティッシュグレナディアーズ/The British Grenadiers』feat.東北きりたん/Tohoku Kiritan",
-      "lang": "日"
-    },
-    {
       "id": "ZoXLYsrmQK0",
       "title": "Виктор Цой - Песня Без Слов",
       "lang": "俄"
@@ -1199,11 +1224,6 @@
       "id": "FZk1XNY4GxM",
       "title": "Yuki Kajiura - Historia(Lyrics)",
       "lang": "純音樂"
-    },
-    {
-      "id": "HNZf1bwx3Is",
-      "title": "RADWIMPS - すずめ (Suzume) ft. 十明 / Suzume no Tojimari / Cyan Nyan Cover",
-      "lang": "日"
     },
     {
       "id": "oa3IkuHOUu8",
@@ -1423,11 +1443,6 @@
     {
       "id": "DdF-u3fe5pg",
       "title": "米津玄師  Kenshi Yonezu - LADY",
-      "lang": "日"
-    },
-    {
-      "id": "GdH0TsPznUs",
-      "title": "LADY (米津玄師) / 藍璃かんな Cover",
       "lang": "日"
     },
     {
@@ -1801,11 +1816,6 @@
       "lang": "波蘭"
     },
     {
-      "id": "QoUsw8SZ0og",
-      "title": "ドラドの悲劇\u3000/  feat. IA & Fukase",
-      "lang": "日"
-    },
-    {
       "id": "BfUQKQjSoUQ",
       "title": "1 【电音金坷垃特别篇】Alone   Marshmello——征服全世界的灵魂节奏！ 1 1Av9350847,P1",
       "lang": "純音樂"
@@ -2026,11 +2036,6 @@
       "lang": "日"
     },
     {
-      "id": "rp9G3W1gc1k",
-      "title": "【紀囧】下一站，告你。",
-      "lang": "中"
-    },
-    {
       "id": "YOF8bMAY2ds",
       "title": "下一袋，與你",
       "lang": "中"
@@ -2088,11 +2093,6 @@
     {
       "id": "QVVv4aICofc",
       "title": "【ウォルピス社】COSMOSを歌ってみました【提供】",
-      "lang": "日"
-    },
-    {
-      "id": "5GUaMOpfmr8",
-      "title": "ロクデナシ「ただ声一つ」/ Rokudenashi - One Voice【Official Music Video】",
       "lang": "日"
     },
     {
@@ -2209,16 +2209,6 @@
       "id": "V1vLXasoJnI",
       "title": "仆街 仆街 仆街 金翅仆街 (原曲: 芭比Q了)",
       "lang": "粵"
-    },
-    {
-      "id": "7BmlNYsVjfA",
-      "title": "レムの魔法\u3000Covered by Layla.",
-      "lang": "日"
-    },
-    {
-      "id": "b-V2ZwSBfIU",
-      "title": "ヲタみん (Wotamin) - 6900000000 [English Sub]",
-      "lang": "日"
     },
     {
       "id": "M8neiBdTDVc",
@@ -2346,11 +2336,6 @@
       "lang": "日"
     },
     {
-      "id": "D4Y-C71zPjo",
-      "title": "【1周年】✧ 贖罪 - 傘村トータ / Lucia（Cover）",
-      "lang": "日"
-    },
-    {
       "id": "nvAQt9f63eE",
       "title": "【金坷垃】农 锯 人",
       "lang": "中"
@@ -2411,11 +2396,6 @@
       "lang": "德"
     },
     {
-      "id": "EFZ-Y0u_wkI",
-      "title": "Lightning strikes - Stamatis Spanoudakis",
-      "lang": "希臘"
-    },
-    {
       "id": "6gar6MONCKs",
       "title": "\"Θά 'ρθεις σαν αστραπή\" - Greek Song About The Fall of Constantinople",
       "lang": "希臘"
@@ -2424,11 +2404,6 @@
       "id": "45jSY48vd6A",
       "title": "Säkkijärven polkkaa - 薩基雅爾維的波爾卡",
       "lang": "芬蘭"
-    },
-    {
-      "id": "a7CSVNZIUJY",
-      "title": "歩き出すのだ、傘がなくとも。\u3000Covered by Layla.",
-      "lang": "日"
     },
     {
       "id": "WYVPWs-qANs",
