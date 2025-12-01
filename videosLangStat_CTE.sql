@@ -1,3 +1,4 @@
+-- reference -> https://www.gss.com.tw/blog/sql-cte-recursive-query-postgresql-mssql
 WITH TotalCount AS (
     SELECT COUNT(*) * 1.0 AS total_videos FROM videos
 ), 
