@@ -9,19 +9,22 @@ class CollectData
     private static readonly HttpClient httpClient = new();
 
     // return full api result
-    public static async Task<string> GetPlayListItemData(string url, List<JsonElement> videoList, string apiKey, string pageToken = "", int i = 0)
+    private static async Task<string> GetPlayListItemData(string url, List<JsonElement> videoList,
+        string apiKey, string pageToken = "", int i = 0)
     {
         Uri playListUrl = new(url);
         var playListUrlArguments = playListUrl.Query
-                                              .Substring(1) // Remove '?'
-                                              .Split('&')
-                                              .Select(q => q.Split('='))
-                                              .ToDictionary(
-                                                q => q.FirstOrDefault()!,       // assert that the length is greater than 2
-                                                q => q.Skip(1).FirstOrDefault()!
-                                              );
+            .Substring(1) // Remove '?'
+            .Split('&')
+            .Select(q => q.Split('='))
+            .ToDictionary(
+                q => q.FirstOrDefault()!, // assert that the length is greater than 2
+                q => q.Skip(1).FirstOrDefault()!
+            );
 
-        UriBuilder apiUrl = new($"https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId={playListUrlArguments!["list"]}&key={apiKey}");
+        UriBuilder apiUrl =
+            new(
+                $"https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId={playListUrlArguments!["list"]}&key={apiKey}");
         if (pageToken != "")
         {
             apiUrl.Query = string.Concat(apiUrl.Query.AsSpan(1), "&", $"pageToken={pageToken}");
@@ -37,71 +40,69 @@ class CollectData
             videoList.Add(video);
         }
 
-        if (root.TryGetProperty("nextPageToken", out JsonElement token))
+        if (root.TryGetProperty("nextPageToken", out var token))
         {
             i++;
             Console.WriteLine($"page {i}");
             return await GetPlayListItemData(url, videoList, apiKey, token.GetString()!, i);
         }
-        else
-        {
-            // await File.WriteAllTextAsync("./data.json", JsonSerializer.Serialize(new { items = videoList }, options));
-            Console.WriteLine("collect PlayListItemData complete");
-            return JsonSerializer.Serialize(
-                new { items = videoList },
-                new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-                });
-        }
+
+        // await File.WriteAllTextAsync("./data.json", JsonSerializer.Serialize(new { items = videoList }, options));
+        Console.WriteLine("collect PlayListItemData complete");
+        return JsonSerializer.Serialize(
+            new { items = videoList },
+            new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            });
     }
 
-    public static async Task<JsonDocument> GetPlayListData(string url, string apiKey)
+    public static async Task<(string, JsonDocument)> GetPlayListData(string url, string apiKey)
     {
         Uri playListUrl = new(url);
         var playListUrlArguments = playListUrl.Query
-                                              .Substring(1) // Remove '?'
-                                              .Split('&')
-                                              .Select(q => q.Split('='))
-                                              .ToDictionary(
-                                                q => q.FirstOrDefault()!,       // assert that the length is greater than 2
-                                                q => q.Skip(1).FirstOrDefault()!
-                                              );
+            .Substring(1) // Remove '?'
+            .Split('&')
+            .Select(q => q.Split('='))
+            .ToDictionary(
+                q => q.FirstOrDefault()!, // assert that the length is greater than 2
+                q => q.Skip(1).FirstOrDefault()!
+            );
 
-        UriBuilder apiUrl = new($"https://youtube.googleapis.com/youtube/v3/playlists?part=snippet&maxResults=50&id={playListUrlArguments!["list"]}&key={apiKey}");
+        UriBuilder apiUrl =
+            new(
+                $"https://youtube.googleapis.com/youtube/v3/playlists?part=snippet&maxResults=50&id={playListUrlArguments!["list"]}&key={apiKey}");
 
-        try
-        {
-            var res = await httpClient.GetStringAsync(apiUrl.Uri);
-            var json = JsonDocument.Parse(res, new JsonDocumentOptions { AllowTrailingCommas = true });
-            Console.WriteLine("collect PlayListData complete");
-            return json;
-        }
-        catch (System.Exception)
-        {
-            throw;
-        }
+        var res = await httpClient.GetStringAsync(apiUrl.Uri);
+        var json = JsonDocument.Parse(res, new JsonDocumentOptions { AllowTrailingCommas = true });
+        Console.WriteLine("collect PlayListData complete");
+        return (playListUrlArguments!["list"], json);
     }
 
     public static async Task Invoke(string playListURL, string apiKey, string pageToken = "")
     {
+        // List<SQLiteVideo> SQLiteVideos = new();
         List<Video> details = new();
 
-        using JsonDocument playListData = await GetPlayListData(playListURL, apiKey);
+        var playList = await GetPlayListData(playListURL, apiKey);
+        using var playListData = playList.Item2;
         JsonElement playListDataRoot = playListData.RootElement;
         var playListDataItems = playListDataRoot.GetProperty("items")[0];
 
+        var plsylistId = playList.Item1;
         var ch = playListDataItems.GetProperty("snippet")
-                                  .GetProperty("channelTitle")
-                                  .GetString()!;
+            .GetProperty("channelTitle")
+            .GetString()!;
         var playListtitle = playListDataItems.GetProperty("snippet")
-                                             .GetProperty("localized")
-                                             .GetProperty("title")
-                                             .GetString()!;
+            .GetProperty("localized")
+            .GetProperty("title")
+            .GetString()!;
 
-        string playList = await GetPlayListItemData(playListURL, new List<JsonElement>(), apiKey, pageToken = "", 0);
-        using JsonDocument playListItemData = JsonDocument.Parse(playList, new JsonDocumentOptions { AllowTrailingCommas = true });
+        string playListItem =
+            await GetPlayListItemData(playListURL, new List<JsonElement>(), apiKey, pageToken = "", 0);
+        using JsonDocument playListItemData =
+            JsonDocument.Parse(playListItem, new JsonDocumentOptions { AllowTrailingCommas = true });
 
         JsonElement playListItemDataroot = playListItemData.RootElement;
         JsonElement playListItemDataitems = playListItemDataroot.GetProperty("items");
@@ -110,61 +111,72 @@ class CollectData
         if (File.Exists($"./resources/{ch}-{playListtitle}_videosLangCheck.json"))
         {
             string dbPath = @$"./resources/{ch}-{playListtitle}_videos.sqlite";
-            using var db = new SQLiteConnection("data source=" + dbPath);
+            await using var db = new SQLiteConnection("data source=" + dbPath);
             videoDB = db.Query<Video>("select * from videos");
         }
 
         var PlayListAPI = playListItemDataitems.EnumerateArray().Index();
         foreach (var (i, video) in PlayListAPI)
         {
+            int position = video.GetProperty("snippet")
+                .GetProperty("position")
+                .GetInt32()+1; //拿到的資料從0開始，+1符合習慣
+
             string? title = video.GetProperty("snippet")
-                                 .GetProperty("title")
-                                 .GetString()!
-                                 .Replace("\n", "");
+                .GetProperty("title")
+                .GetString()!
+                .Replace("\n", "");
             string? id = video.GetProperty("snippet")
-                              .GetProperty("resourceId")
-                              .GetProperty("videoId")
-                              .GetString();
+                .GetProperty("resourceId")
+                .GetProperty("videoId")
+                .GetString();
 
             string url = $"https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id={id}&key={apiKey}";
             var res = await httpClient.GetStringAsync(url);
-            using (JsonDocument apiRes = JsonDocument.Parse(res, new JsonDocumentOptions { AllowTrailingCommas = true }))
+            using (JsonDocument apiRes =
+                   JsonDocument.Parse(res, new JsonDocumentOptions { AllowTrailingCommas = true }))
             {
                 JsonElement resRoot = apiRes.RootElement;
                 var data = resRoot.GetProperty("items").EnumerateArray().ToArray();
-                if (data.Count() == 0)
+
+                // var SQLLiteVideo = new SQLiteVideo(
+                //     id!,
+                //     title!,
+                //     lang
+                // );
+
+                if (data.Length == 0)
                 {
                     title = $"{title} - Not Found";
                 }
-                else if (videoDB != null)
+                else
                 {
-                    var exists = videoDB.FirstOrDefault(v => v.id == id);
-                    if (exists != null)
+                    var lang = data[0]
+                        .GetProperty("snippet")
+                        .TryGetProperty("defaultAudioLanguage", out var defaultAudioLanguage)
+                        ? defaultAudioLanguage.GetString()!
+                        : "unknown";
+                    Video? currentVideoDetail;
+                    
+                    if (videoDB != null)
                     {
-                        details.Add(exists);
+                        var exists = videoDB.FirstOrDefault(v => v.Id == id);
+                        if (exists != null)
+                        {
+                            currentVideoDetail = exists;
+                        }
+                        else
+                        {
+                            currentVideoDetail = new Video(id!, title!, lang, "", "");
+                        }
                     }
                     else
                     {
-                        var detail = new Video(
-                            id!,
-                            title!,
-                            data[0].GetProperty("snippet").TryGetProperty("defaultAudioLanguage", out JsonElement lang)
-                                    ? lang.GetString()!
-                                    : "unknown"
-                        );
-                        details.Add(detail);
+                        currentVideoDetail = new Video(id!, title!, lang, "", "");
                     }
-                }
-                else
-                {
-                    var detail = new Video(
-                            id!,
-                            title!,
-                            data[0].GetProperty("snippet").TryGetProperty("defaultAudioLanguage", out JsonElement lang)
-                                    ? lang.GetString()!
-                                    : "unknown"
-                        );
-                    details.Add(detail);
+                    
+                    currentVideoDetail.Playlists.Add(new PlaylistInfo(plsylistId, ch, playListtitle, position));
+                    details.Add(currentVideoDetail);
                 }
             }
 
@@ -181,7 +193,7 @@ class CollectData
                     WriteIndented = true,
                     Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
                 })
-            );
+        );
 
         Console.Write("因Youtube API能拿到的資料不完整，");
         Console.WriteLine($"請到檔案「{ch}-{playListtitle}_videosLangCheck.json」再次確認每隻影片的語言，再行利用stat指令做統計");
