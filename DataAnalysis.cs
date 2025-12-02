@@ -1,6 +1,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Data.SQLite;
+using System.Text.RegularExpressions;
 using Dapper;
 using MoreLinq;
 using Plotly.NET.ImageExport;
@@ -11,12 +12,13 @@ class DataAnalysis
 {
     public static async Task Invoke(string playListUrl, string apiKey)
     {
-        using JsonDocument playListData = await CollectData.GetPlayListData(playListUrl, apiKey);
+        using JsonDocument playListData = (await CollectData.GetPlayListData(playListUrl, apiKey)).Item2;
         JsonElement playListDataRoot = playListData.RootElement;
         var playListDataitems = playListDataRoot.GetProperty("items")[0];
 
         var ch = playListDataitems.GetProperty("snippet").GetProperty("channelTitle").GetString()!;
-        var playListtitle = playListDataitems.GetProperty("snippet").GetProperty("localized").GetProperty("title").GetString()!;
+        var playListtitle = playListDataitems.GetProperty("snippet").GetProperty("localized").GetProperty("title")
+            .GetString()!;
 
         var jsonPath = $"./resources/{ch}-{playListtitle}_videosLangCheck.json";
         string file = await File.ReadAllTextAsync(jsonPath);
@@ -29,13 +31,36 @@ class DataAnalysis
         using var db = new SQLiteConnection("data source=" + dbPath);
         var videos = db.Query<Video>("select * from videos");
 
-        var baseSeq = videos.GroupBy(v => v.lang)
-                         .OrderByDescending(item => item.Count())
-                         .ThenBy(item => item.Key)
-                         .ToList();
+        string pattern = @"\[(.*?)\]";
 
-        await MakeJson(baseSeq, ch, playListtitle);
-        MakePieChart(baseSeq, ch, playListtitle);
+        var baseseq = videos
+            .Where(video => !string.IsNullOrEmpty(video.lang))
+            .SelectMany(video =>
+            {
+                var lang = video.lang.Trim();
+                if (lang.Contains('[') && lang.Contains(']'))
+                {
+                    return Regex.Matches(video.lang, pattern)
+                        .Select(m => m.Groups[1].Value.Trim())
+                        .Where(lang => !string.IsNullOrEmpty(lang))
+                        .Select(lang => new { Lang = lang, Video = video });
+                }
+
+                return new[] { new { Lang = lang, Video = video } };
+            })
+            .GroupBy(t => t.Lang, t => t.Video)
+            .OrderByDescending(group => group.Count())
+            .ThenBy(group => group.Key)
+            .ToList();
+        ;
+
+        var baseSeq = videos.GroupBy(v => v.lang)
+            .OrderByDescending(item => item.Count())
+            .ThenBy(item => item.Key)
+            .ToList();
+
+        await MakeJson(baseseq, ch, playListtitle);
+        MakePieChart(baseseq, ch, playListtitle);
     }
 
     static void MaintainDatabase(Videos? json, string dbPath)
@@ -50,7 +75,7 @@ class DataAnalysis
         {
             if (video.lang != "ukunown")
             {
-                var v = db.Query<Video>("select * from videos where id=@id", new { id = video.id });
+                var v = db.Query<Video>("select * from videos where id=@id", new { id = video.Id });
                 if (!v.Any())
                 {
                     var insertScript = "INSERT INTO videos VALUES (@id, @title, @lang)";
@@ -58,22 +83,22 @@ class DataAnalysis
                 }
                 else
                 {
-                    var insertScript = "UPDATE videos SET lang=@title, lang=@lang where id=@id";
-                    var s = db.Execute(insertScript, video);
+                    var insertScript = "UPDATE videos SET title=@title, lang=@lang where id=@id";
+                    var s = db.Execute(insertScript, new { id = video.Id, video.lang, title = video.Title });
                 }
             }
         }
 
         // 確保資料庫的東西跟播放清單一致
         var videos = db.Query<Video>("select * from videos");
-        var diff = videos.ExceptBy(json.items, video => video.id).ToList();
+        var diff = videos.ExceptBy(json.items, video => video.Id).ToList();
         if (diff.Any())
         {
             foreach (var video in diff)
             {
                 Console.WriteLine(video);
                 var insertScript = "DELETE FROM videos where id=@id";
-                var s = db.Execute(insertScript, new { id = video.id });
+                var s = db.Execute(insertScript, new { id = video.Id });
             }
         }
     }
@@ -103,20 +128,20 @@ class DataAnalysis
         var total = baseSeq.Aggregate(0d, (past, curr) => past + curr.Count());
 
         var plotSeq = baseSeq.Select(item =>
-                             {
-                                 var s = item.Key;
+            {
+                var s = item.Key;
 
-                                 if (item.Count() / total < 0.05)
-                                 {
-                                    s = "others";
-                                 }
+                if (item.Count() / total < 0.05)
+                {
+                    s = "others";
+                }
 
-                                 var m = item.Count() * item.Count();
-                                 return (s, item.Count());
-                             })
-                             .GroupBy(item => item.s)
-                             .Select(item => (item.Key, item.Sum(item => item.Item2)))
-                             .ToDictionary(item => item.Key, item => (double)item.Item2);
+                var m = item.Count() * item.Count();
+                return (s, item.Count());
+            })
+            .GroupBy(item => item.s)
+            .Select(item => (item.Key, item.Sum(item => item.Item2)))
+            .ToDictionary(item => item.Key, item => (double)item.Item2);
 
         var pie = Plotly.NET.CSharp.Chart.Pie<double, string, string>(
             values: plotSeq.Select(item => item.Value).ToList(),
@@ -125,7 +150,7 @@ class DataAnalysis
 
         // reference -> https://stackoverflow.com/questions/72504275/make-chart-fill-size-of-browser-window
         pie.WithTitle($"詳細資訊請參考同名的json檔！")
-           .WithConfig(Config.init(Responsive: true))
-           .SavePNG($"./resources/{ch}-{playListtitle}_result", Width: 1200, Height: 800);
+            .WithConfig(Config.init(Responsive: true))
+            .SavePNG($"./resources/{ch}-{playListtitle}_result", Width: 1200, Height: 800);
     }
 }
