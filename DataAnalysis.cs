@@ -75,16 +75,17 @@ class DataAnalysis
         {
             if (video.lang != "ukunown")
             {
-                var v = db.Query<Video>("select * from videos where id=@id", new { id = video.Id });
-                if (!v.Any())
+                var sqlite_db = db.Query<Video>("select * from videos where id=@id", new { id = video.Id });
+                var v = new { id = video.Id, video.lang, title = video.Title };
+                if (!sqlite_db.Any())
                 {
                     var insertScript = "INSERT INTO videos VALUES (@id, @title, @lang)";
-                    var s = db.Execute(insertScript, video);
+                    var s = db.Execute(insertScript, v);
                 }
                 else
                 {
                     var insertScript = "UPDATE videos SET title=@title, lang=@lang where id=@id";
-                    var s = db.Execute(insertScript, new { id = video.Id, video.lang, title = video.Title });
+                    var s = db.Execute(insertScript, v);
                 }
             }
         }
