@@ -1,5 +1,5 @@
 -- reference -> https://www.gss.com.tw/blog/sql-cte-recursive-query-postgresql-mssql
-WITH FilteredVideos AS (
+WITH PlaylistVideos AS (
     SELECT v.video_id, v.title, v.lang, pl.position
     FROM playlist_item pl
     JOIN videos v ON pl.video_id = v.video_id
@@ -8,14 +8,14 @@ WITH FilteredVideos AS (
 ),
 TotalCount AS (
     SELECT COUNT(*) * 1.0 AS total_videos 
-    FROM FilteredVideos
+    FROM PlaylistVideos
 ),
 LangStats AS (
     SELECT 
         lang,
         COUNT(*) AS quantity,
         COUNT(*) * 1.0 / (SELECT total_videos FROM TotalCount) AS percentage
-    FROM FilteredVideos
+    FROM PlaylistVideos
     GROUP BY lang
 ),
 Presentation as (
