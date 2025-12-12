@@ -4,7 +4,7 @@ using System.Data.SQLite;
 using Dapper;
 using MoreLinq;
 
-class CollectData
+class APICollector
 {
     private static readonly HttpClient httpClient = new();
 
