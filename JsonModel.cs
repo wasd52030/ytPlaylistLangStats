@@ -15,6 +15,14 @@ public class PlaylistInfo : IEquatable<PlaylistInfo>
 
     [JsonPropertyName("position")] public int Position { get; set; }
 
+    public PlaylistInfo()
+    {
+        Id = "";
+        Owner = "";
+        Title = "";
+        Position = 0;
+    }
+
     public PlaylistInfo(string id, string owner, string title, int position)
     {
         Id = id;
