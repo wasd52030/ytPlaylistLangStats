@@ -8,11 +8,11 @@ using Plotly.NET.ImageExport;
 using Plotly.NET;
 
 
-class DataAnalysis
+class AnalyticsService
 {
     public static async Task Invoke(string playListUrl, string apiKey)
     {
-        using JsonDocument playListData = (await CollectData.GetPlayListData(playListUrl, apiKey)).Item2;
+        using JsonDocument playListData = (await APICollector.GetPlayListData(playListUrl, apiKey)).Item2;
         JsonElement playListDataRoot = playListData.RootElement;
         var playListDataitems = playListDataRoot.GetProperty("items")[0];
 
@@ -26,7 +26,7 @@ class DataAnalysis
         var json = JsonSerializer.Deserialize<Videos>(file);
 
         string dbPath = @$"./resources/{ch}-{playListtitle}_videos.sqlite";
-        MaintainDatabase(json, dbPath);
+        MaintainSqlite(json, dbPath);
 
         using var db = new SQLiteConnection("data source=" + dbPath);
         var videos = db.Query<Video>("select * from videos");
@@ -63,7 +63,7 @@ class DataAnalysis
         MakePieChart(baseseq, ch, playListtitle);
     }
 
-    static void MaintainDatabase(Videos? json, string dbPath)
+    static void MaintainSqlite(Videos? json, string dbPath)
     {
         using var db = new SQLiteConnection("data source=" + dbPath);
         if (!File.Exists(dbPath))
