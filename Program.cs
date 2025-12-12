@@ -80,7 +80,21 @@ async Task main()
     {
         // var apiKey = Environment.GetEnvironmentVariable("YoutubeAPIKey") ?? config.apiKey;
         var apiKey = config.apiKey;
-        await CollectData.Invoke(PlaylistOption, apiKey);
+        await APICollector.Invoke(PlaylistOption, apiKey);
+    }, PlaylistOption);
+
+
+    // download command
+    var UpdateFromPostgresqlCommand = new Command(name: "postgresql", description: "初步下載統整播放清單中的語言")
+    {
+        PlaylistOption
+    };
+    downloadCommand.AddCommand(UpdateFromPostgresqlCommand);
+    UpdateFromPostgresqlCommand.SetHandler(async (PlaylistOption) =>
+    {
+        // var apiKey = Environment.GetEnvironmentVariable("YoutubeAPIKey") ?? config.apiKey;
+        var apiKey = config.apiKey;
+        await UpdateFromPostgresql.Invoke(PlaylistOption, apiKey);
     }, PlaylistOption);
 
     // stat command
@@ -93,10 +107,11 @@ async Task main()
     {
         // var apiKey = Environment.GetEnvironmentVariable("YoutubeAPIKey") ?? config.apiKey;
         var apiKey = config.apiKey;
-        await DataAnalysis.Invoke(PlaylistOption, apiKey);
+        await AnalyticsService.Invoke(PlaylistOption, apiKey);
     }, PlaylistOption);
 
     await rootCommand.InvokeAsync(args);
+    
 }
 
 await main();
