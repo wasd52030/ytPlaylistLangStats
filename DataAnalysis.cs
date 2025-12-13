@@ -33,7 +33,7 @@ class AnalyticsService
 
         string pattern = @"\[(.*?)\]";
 
-        var baseseq = videos
+        var base_seq = videos
             .Where(video => !string.IsNullOrEmpty(video.lang))
             .SelectMany(video =>
             {
@@ -52,15 +52,14 @@ class AnalyticsService
             .OrderByDescending(group => group.Count())
             .ThenBy(group => group.Key)
             .ToList();
-        ;
 
-        var baseSeq = videos.GroupBy(v => v.lang)
-            .OrderByDescending(item => item.Count())
-            .ThenBy(item => item.Key)
-            .ToList();
+        // var baseSeq = videos.GroupBy(v => v.lang)
+        //     .OrderByDescending(item => item.Count())
+        //     .ThenBy(item => item.Key)
+        //     .ToList();
 
-        await MakeJson(baseseq, ch, playListtitle);
-        MakePieChart(baseseq, ch, playListtitle);
+        await MakeJson(base_seq, ch, playListtitle);
+        MakePieChart(base_seq, ch, playListtitle);
     }
 
     static void MaintainSqlite(Videos? json, string dbPath)
