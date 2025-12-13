@@ -84,8 +84,8 @@ async Task main()
     }, PlaylistOption);
 
 
-    // download command
-    var UpdateFromPostgresqlCommand = new Command(name: "postgresql", description: "初步下載統整播放清單中的語言")
+    // download postgresql command
+    var UpdateFromPostgresqlCommand = new Command(name: "postgresql", description: "從postgresql中更新資料")
     {
         PlaylistOption
     };
