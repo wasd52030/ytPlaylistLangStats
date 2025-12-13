@@ -1,14 +1,24 @@
 -- reference -> https://www.gss.com.tw/blog/sql-cte-recursive-query-postgresql-mssql
-WITH TotalCount AS (
-    SELECT COUNT(*) * 1.0 AS total_videos FROM videos
-), 
+WITH UnnestedVideos AS (
+    SELECT
+        -- 1. 移除首尾的 '[' 和 ']'
+        -- 2. 將 '][' 替換成逗號 ','
+        -- 3. 使用 string_to_array 拆分成陣列
+        -- 4. 使用 unnest 將陣列展開成多行
+        unnest(string_to_array(TRIM(LEADING '[' FROM TRIM(TRAILING ']' FROM t1.lang)), '][')) AS lang_split
+    FROM
+        videos t1
+),
+TotalCount AS (
+    SELECT COUNT(*) * 1.0 AS total_videos FROM UnnestedVideos
+),
 LangStats AS (
     SELECT 
-        lang,
+        lang_split AS lang,
         COUNT(*) AS quantity,
         COUNT(*) * 1.0 / (SELECT total_videos FROM TotalCount) AS percentage
     FROM 
-        videos
+        UnnestedVideos
     GROUP BY 
         lang
 ),
