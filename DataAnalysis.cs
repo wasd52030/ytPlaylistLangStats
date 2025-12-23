@@ -16,9 +16,13 @@ class AnalyticsService
         JsonElement playListDataRoot = playListData.RootElement;
         var playListDataitems = playListDataRoot.GetProperty("items")[0];
 
-        var ch = playListDataitems.GetProperty("snippet").GetProperty("channelTitle").GetString()!;
-        var playListtitle = playListDataitems.GetProperty("snippet").GetProperty("localized").GetProperty("title")
-            .GetString()!;
+        var ch = playListDataitems.GetProperty("snippet")
+                                  .GetProperty("channelTitle")
+                                  .GetString()!;
+        var playListtitle = playListDataitems.GetProperty("snippet")
+                                             .GetProperty("localized")
+                                             .GetProperty("title")
+                                             .GetString()!;
 
         var jsonPath = $"./resources/{ch}-{playListtitle}_videosLangCheck.json";
         string file = await File.ReadAllTextAsync(jsonPath);
@@ -30,7 +34,7 @@ class AnalyticsService
 
         using var db = new SQLiteConnection("data source=" + dbPath);
         var videos = db.Query<Video>("select * from videos");
-        
+
         var base_seq = videos
             .Where(video => !string.IsNullOrEmpty(video.lang))
             .SelectMany(video =>
