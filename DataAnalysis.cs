@@ -30,9 +30,7 @@ class AnalyticsService
 
         using var db = new SQLiteConnection("data source=" + dbPath);
         var videos = db.Query<Video>("select * from videos");
-
-        string pattern = @"\[(.*?)\]";
-
+        
         var base_seq = videos
             .Where(video => !string.IsNullOrEmpty(video.lang))
             .SelectMany(video =>
@@ -40,7 +38,7 @@ class AnalyticsService
                 var lang = video.lang.Trim();
                 if (lang.Contains('[') && lang.Contains(']'))
                 {
-                    return Regex.Matches(video.lang, pattern)
+                    return Regex.Matches(video.lang, @"\[(.*?)\]")
                         .Select(m => m.Groups[1].Value.Trim())
                         .Where(lang => !string.IsNullOrEmpty(lang))
                         .Select(lang => new { Lang = lang, Video = video });
