@@ -4,7 +4,7 @@ WITH PlaylistVideos AS (
     FROM playlist_item pl
     JOIN videos v ON pl.video_id = v.video_id
     JOIN playlists p ON pl.playlist_id = p.playlist_id
-    WHERE p.title = 'BBBGGGMMM'
+    WHERE p.playlist_id = 'PLdx_s59BrvfXJXyoU5BHpUkZGmZL0g3Ip'
 ),
 UnnestedVideos AS (
     SELECT
